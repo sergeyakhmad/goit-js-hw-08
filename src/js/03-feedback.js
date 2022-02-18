@@ -5,10 +5,10 @@ const STORAGE_KEY = 'feedback-form-state';
 let formData = {};
 
 form.addEventListener('submit', onFormSubmit);
-form.addEventListener('input', throttle(textAreaInput, 500));
+form.addEventListener('input', throttle(onFormInput, 500));
 populateForm();
 
-function textAreaInput(evt) {
+function onFormInput(evt) {
   formData[evt.target.name] = evt.target.value;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
 }
