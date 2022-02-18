@@ -1,39 +1,39 @@
 import throttle from 'lodash.throttle';
 
 const form = document.querySelector('.feedback-form');
-const LOCAL_STORAGE = 'feedback-form-state';
-let items = {};
+const STORAGE_KEY = 'feedback-form-state';
+let formData = {};
 
-form.addEventListener('submit', formSubmit);
+form.addEventListener('submit', onFormSubmit);
 form.addEventListener('input', throttle(textAreaInput, 500));
 populateForm();
 
 function textAreaInput(evt) {
-  items[evt.target.name] = evt.target.value;
-  localStorage.setItem(LOCAL_STORAGE, JSON.stringify(items));
+  formData[evt.target.name] = evt.target.value;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
 }
 
-function formSubmit(evt) {
+function onFormSubmit(evt) {
   evt.preventDefault();
 
   if (form.email.value === '' || form.message.value === '') {
     alert('Все поля должны быть заполнены!');
   } else {
-    console.log(items);
+    console.log(formData);
     evt.currentTarget.reset();
 
-    localStorage.removeItem(LOCAL_STORAGE);
-    items = {};
+    localStorage.removeItem(STORAGE_KEY);
+    formData = {};
   }
 }
 
 function populateForm() {
-  const savedObject = JSON.parse(localStorage.getItem(LOCAL_STORAGE));
+  const savedObject = JSON.parse(localStorage.getItem(STORAGE_KEY));
 
   for (const key in savedObject) {
     if (key) {
       form[key].value = savedObject[key];
-      items = savedObject;
+      formData = savedObject;
     }
   }
 }
